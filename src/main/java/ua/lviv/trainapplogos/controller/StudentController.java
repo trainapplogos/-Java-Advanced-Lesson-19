@@ -2,39 +2,44 @@ package ua.lviv.trainapplogos.controller;
 
 import java.io.IOException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import ua.lviv.trainapplogos.domain.Student;
 import ua.lviv.trainapplogos.service.StudentService;
 
-@RestController
+@Controller
 public class StudentController {
 	@Autowired
 	private StudentService studentService;
 	
 	@PostMapping("/saveStudent")
+    @ResponseBody
 	public String saveStudent(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName, 
 			@RequestParam("age") Integer age,  @RequestParam("imagePath") String imagePath, HttpServletRequest req) {
 		Student savedStudent = studentService.save(firstName, lastName, age, imagePath);
-		return "profile";
+		return "profile" + savedStudent.getId();
 	}
 	
-	@GetMapping("/profile")
-	public String init(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName, @RequestParam("age") Integer age, @RequestParam("imagePath") String imagePath, HttpServletRequest req,  HttpServletResponse res) throws ServletException, IOException {
-		Student stud = new Student(firstName, lastName, age, imagePath);
-		req.setAttribute("student", stud);
-		req.getRequestDispatcher("profile.jsp").forward(req, res);
+	@GetMapping("/profile/{id}")
+	public String init(@PathVariable("id") Long id , Model model) throws ServletException, IOException {
+		Student student = studentService.getOne(id);
+		model.addAttribute("student", student);
 		return "profile";
+	}
+
+	@GetMapping("/")
+	public String index(){
+		return "index";
 	}
 	
 }

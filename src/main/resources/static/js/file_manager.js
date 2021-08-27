@@ -15,6 +15,12 @@ function saveStudent(firstName, lastName, age, imagePath) {
 	var xhr = new XMLHttpRequest();
 	xhr.open("POST", "/saveStudent");
 	xhr.send(formData);
+    // let responseText = xhr.responseText;
+	xhr.onload = function() {
+		console.log(xhr.response)
+		console.log("Hello")
+		document.location.href = (xhr.responseText);
+	}
 	
 	//xhr.close();
 }

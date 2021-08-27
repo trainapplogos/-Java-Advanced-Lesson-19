@@ -14,4 +14,8 @@ public class StudentService {
 	public Student save(String firstName, String lastName, int age, String imagePath) {
 		return studentRepository.save(new Student(firstName, lastName, age, imagePath));
 	}
+
+	public Student getOne(Long id){
+		return studentRepository.getById(id);
+	}
 }
