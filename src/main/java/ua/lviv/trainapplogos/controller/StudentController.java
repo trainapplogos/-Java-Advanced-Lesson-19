@@ -27,7 +27,7 @@ public class StudentController {
 	public String saveStudent(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName, 
 			@RequestParam("age") Integer age,  @RequestParam("imagePath") String imagePath, HttpServletRequest req) {
 		Student savedStudent = studentService.save(firstName, lastName, age, imagePath);
-		return "profile" + savedStudent.getId();
+		return "profile/" + savedStudent.getId();
 	}
 	
 	@GetMapping("/profile/{id}")
